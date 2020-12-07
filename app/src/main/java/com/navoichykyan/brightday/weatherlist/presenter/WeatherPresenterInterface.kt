@@ -1,4 +1,4 @@
-package com.navoichykyan.brightday
+package com.navoichykyan.brightday.weatherlist.presenter
 
 interface WeatherPresenterInterface {
     fun fetchWeatherList(url: String)

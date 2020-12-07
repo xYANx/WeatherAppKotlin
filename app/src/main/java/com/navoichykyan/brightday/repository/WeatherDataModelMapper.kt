@@ -1,4 +1,4 @@
-package com.navoichykyan.brightday
+package com.navoichykyan.brightday.repository
 
 import org.json.JSONObject
 import java.text.ParseException

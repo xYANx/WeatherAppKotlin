@@ -1,4 +1,4 @@
-package com.navoichykyan.brightday
+package com.navoichykyan.brightday.repository
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

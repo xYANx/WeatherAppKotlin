@@ -1,6 +1,8 @@
-package com.navoichykyan.brightday
+package com.navoichykyan.brightday.weatherlist.presenter
 
 import android.view.View
+import com.navoichykyan.brightday.ViewsActivityInterface
+import com.navoichykyan.brightday.repository.getWeatherList
 import io.reactivex.disposables.Disposable
 
 class WeatherPresenter(

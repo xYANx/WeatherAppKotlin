@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.navoichykyan.brightday.weatherlist.ForecastFragment
+import com.navoichykyan.brightday.weatherlist.WeatherFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ViewsActivityInterface {
@@ -41,7 +43,8 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         if (permission) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragment, WeatherFragment(), "WeatherFragment")
+                .add(R.id.fragment,
+                    WeatherFragment(), "WeatherFragment")
                 .commit()
             bottomNavigation.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {

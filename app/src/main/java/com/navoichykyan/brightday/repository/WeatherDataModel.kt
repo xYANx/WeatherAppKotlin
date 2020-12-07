@@ -1,4 +1,4 @@
-package com.navoichykyan.brightday
+package com.navoichykyan.brightday.repository
 
 data class WeatherDataModel(
     val main: String,
