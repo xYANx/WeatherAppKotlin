@@ -6,14 +6,18 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.navoichykyan.brightday.repository.setUrl
 import com.navoichykyan.brightday.weatherlist.ForecastFragment
 import com.navoichykyan.brightday.weatherlist.WeatherFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     private var permission: Boolean = false
+    private var lat = ""
+    private var lon = ""
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +48,8 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment,
-                    WeatherFragment(), "WeatherFragment")
+                    WeatherFragment.newInstance(),
+                    WeatherFragment.TAG)
                 .commit()
             bottomNavigation.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
@@ -53,9 +58,8 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
                             .beginTransaction()
                             .replace(
                                 R.id.fragment,
-                                WeatherFragment(),
-                                "WeatherFragment"
-                            )
+                                WeatherFragment.newInstance(),
+                                WeatherFragment.TAG)
                             .commit()
                         true
                     }
@@ -64,8 +68,8 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
                             .beginTransaction()
                             .replace(
                                 R.id.fragment,
-                                ForecastFragment(),
-                                "ForecastFragment"
+                                ForecastFragment.newInstance(setUrl(lat, lon)),
+                                ForecastFragment.TAG
                             )
                             .commit()
                         true
@@ -97,7 +101,7 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     }
 
     override fun showToast(error: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
     }
 
     override fun setProgressBar(view: Int) {
@@ -105,6 +109,7 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     }
 
     override fun setLocation(newLat: String, newLon: String) {
-        TODO("Not yet implemented")
+        lat = newLat
+        lon = newLon
     }
 }

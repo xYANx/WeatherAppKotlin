@@ -36,5 +36,5 @@ fun getWeatherList(url: String): Single<List<List<WeatherDataModel>>> {
 }
 
 fun setUrl(lat: String, lon: String) =
-  //  "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&units=metric&appid=$appId"
-    "https://api.openweathermap.org/data/2.5/forecast?q=Minsk&units=metric&appid=$appId"
+    "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&units=metric&appid=$appId"
+    //"https://api.openweathermap.org/data/2.5/forecast?q=Minsk&units=metric&appid=$appId"
