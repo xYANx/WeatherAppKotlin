@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     private var permission: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -91,5 +91,17 @@ class MainActivity : AppCompatActivity() {
             else -> {
             }
         }
+    }
+
+    override fun showToast(error: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setProgressBar(view: Int) {
+        progressBar.visibility = view
+    }
+
+    override fun setLocation(newLat: String, newLon: String) {
+        TODO("Not yet implemented")
     }
 }
