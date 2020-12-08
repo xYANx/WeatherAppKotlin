@@ -45,18 +45,52 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         } else {
             permission = true
         }
-        locationManager =
-            getSystemService(LOCATION_SERVICE) as LocationManager?
-        locationManager!!.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            0,
-            10f,
-            MyLocationListener(this)
-        )
+
+        if(permission) {
+            bottomNavigation.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.menuDay -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.fragment,
+                                WeatherFragment.newInstance(),
+                                WeatherFragment.TAG
+                            )
+                            .commit()
+                        currentFragment = WeatherFragment.TAG
+                        true
+                    }
+                    R.id.menuForecast -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.fragment,
+                                ForecastFragment.newInstance(),
+                                ForecastFragment.TAG
+                            )
+                            .commit()
+                        currentFragment = ForecastFragment.TAG
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
         if (savedInstanceState != null) {
             currentFragment = savedInstanceState.getString("fragment", WeatherFragment.TAG)
             lat = savedInstanceState.getString("lat", "0")
             lon = savedInstanceState.getString("lon", "0")
+        } else {
+            locationManager =
+                getSystemService(LOCATION_SERVICE) as LocationManager?
+            locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                0,
+                10f,
+                MyLocationListener(this)
+            )
         }
 
     }
@@ -148,35 +182,6 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
                         ForecastFragment.TAG
                     )
                     .commit()
-            }
-            bottomNavigation.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.menuDay -> {
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.fragment,
-                                WeatherFragment.newInstance(),
-                                WeatherFragment.TAG
-                            )
-                            .commit()
-                        currentFragment = WeatherFragment.TAG
-                        true
-                    }
-                    R.id.menuForecast -> {
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.fragment,
-                                ForecastFragment.newInstance(),
-                                ForecastFragment.TAG
-                            )
-                            .commit()
-                        currentFragment = ForecastFragment.TAG
-                        true
-                    }
-                    else -> false
-                }
             }
         }
     }
