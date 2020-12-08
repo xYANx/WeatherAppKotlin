@@ -25,7 +25,6 @@ class WeatherFragment : Fragment(),
     WeatherViewInterface {
     private var presenter: WeatherPresenterInterface? = null
     private var viewsActivityInterface: ViewsActivityInterface? = null
-    private var locationManager: LocationManager? = null
     private var activityContext: Context? = null
 
     override fun onAttach(context: Context) {
@@ -46,34 +45,13 @@ class WeatherFragment : Fragment(),
     override fun onResume() {
         super.onResume()
         viewsActivityInterface!!.setProgressBar(View.VISIBLE)
-        locationManager =
-            activityContext!!.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager?
-        locationManager!!.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            0,
-            10f,
-            MyLocationListener(this, viewsActivityInterface!!)
-        )
-    }
-
-    fun loadData(url: String) {
         presenter =
             WeatherPresenter(
                 this,
                 viewsActivityInterface
             )
         presenter?.fetchWeatherList(
-            url
-        )
-    }
-
-    @SuppressLint("MissingPermission")
-    fun setGpsProvider(){
-        locationManager!!.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            0,
-            10f,
-            MyLocationListener(this, viewsActivityInterface!!)
+            viewsActivityInterface!!.getUrl()
         )
     }
 

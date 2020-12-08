@@ -1,7 +1,9 @@
 package com.navoichykyan.brightday
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,18 +21,12 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     private var lat = ""
     private var lon = ""
     private var currentFragment = WeatherFragment.TAG
+    private var locationManager: LocationManager? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if(savedInstanceState != null){
-            currentFragment = savedInstanceState.getString("fragment", WeatherFragment.TAG)
-            lat = savedInstanceState.getString("lat", "0")
-            lon = savedInstanceState.getString("lon", "0")
-        }
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -49,57 +45,25 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         } else {
             permission = true
         }
-
-        if (permission) {
-            if(currentFragment == WeatherFragment.TAG) {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(
-                        R.id.fragment,
-                        WeatherFragment.newInstance(),
-                        WeatherFragment.TAG
-                    )
-                    .commit()
-            }
-            if(currentFragment == ForecastFragment.TAG) {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(
-                        R.id.fragment,
-                        ForecastFragment.newInstance(),
-                        ForecastFragment.TAG
-                    )
-                    .commit()
-            }
-            bottomNavigation.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.menuDay -> {
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.fragment,
-                                WeatherFragment.newInstance(),
-                                WeatherFragment.TAG)
-                            .commit()
-                        currentFragment = WeatherFragment.TAG
-                        true
-                    }
-                    R.id.menuForecast -> {
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(
-                                R.id.fragment,
-                                ForecastFragment.newInstance(),
-                                ForecastFragment.TAG
-                            )
-                            .commit()
-                        currentFragment = ForecastFragment.TAG
-                        true
-                    }
-                    else -> false
-                }
-            }
+        locationManager =
+            getSystemService(LOCATION_SERVICE) as LocationManager?
+        locationManager!!.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            0,
+            10f,
+            MyLocationListener(this)
+        )
+        if (savedInstanceState != null) {
+            currentFragment = savedInstanceState.getString("fragment", WeatherFragment.TAG)
+            lat = savedInstanceState.getString("lat", "0")
+            lon = savedInstanceState.getString("lon", "0")
         }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationManager = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -109,19 +73,24 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         outState.putString("lon", lon)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
         when (requestCode) {
             0 -> {
                 permission = true
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.fragment,
+                    .add(
+                        R.id.fragment,
                         WeatherFragment.newInstance(),
-                        WeatherFragment.TAG)
+                        WeatherFragment.TAG
+                    )
                     .commit()
                 if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
                     Log.d("CHECK LOCATION ", "PERMISSION_GRANTED")
                 } else {
                     Log.d("CHECK LOCATION ", "Unavailable")
@@ -147,4 +116,68 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     }
 
     override fun getUrl(): String = setUrl(lat, lon)
+
+    @SuppressLint("MissingPermission")
+    override fun setGpsProvider() {
+        locationManager!!.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            0,
+            10f,
+            MyLocationListener(this)
+        )
+    }
+
+    override fun addFragments() {
+        if (permission) {
+            if (currentFragment == WeatherFragment.TAG) {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(
+                        R.id.fragment,
+                        WeatherFragment.newInstance(),
+                        WeatherFragment.TAG
+                    )
+                    .commit()
+            }
+            if (currentFragment == ForecastFragment.TAG) {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(
+                        R.id.fragment,
+                        ForecastFragment.newInstance(),
+                        ForecastFragment.TAG
+                    )
+                    .commit()
+            }
+            bottomNavigation.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.menuDay -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.fragment,
+                                WeatherFragment.newInstance(),
+                                WeatherFragment.TAG
+                            )
+                            .commit()
+                        currentFragment = WeatherFragment.TAG
+                        true
+                    }
+                    R.id.menuForecast -> {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(
+                                R.id.fragment,
+                                ForecastFragment.newInstance(),
+                                ForecastFragment.TAG
+                            )
+                            .commit()
+                        currentFragment = ForecastFragment.TAG
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
 }

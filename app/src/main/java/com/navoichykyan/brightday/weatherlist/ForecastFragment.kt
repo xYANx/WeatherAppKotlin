@@ -2,7 +2,6 @@ package com.navoichykyan.brightday.weatherlist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.navoichykyan.brightday.R
 import com.navoichykyan.brightday.ViewsActivityInterface
 import com.navoichykyan.brightday.repository.WeatherDataModel
-import com.navoichykyan.brightday.repository.setUrl
 import com.navoichykyan.brightday.weatherlist.adapters.WeatherAdapter
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherPresenter
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherPresenterInterface
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherViewInterface
 import kotlinx.android.synthetic.main.fragment_forecast.*
 
-class ForecastFragment(): Fragment(),
+class ForecastFragment() : Fragment(),
     WeatherViewInterface {
     private var presenter: WeatherPresenterInterface? = null
     private var viewsActivityInterface: ViewsActivityInterface? = null
 
     override fun onAttach(context: Context) {
-        Log.d("ForecastFragment ", "onAttach")
         super.onAttach(context)
         if (context is ViewsActivityInterface) {
             viewsActivityInterface = context

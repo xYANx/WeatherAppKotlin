@@ -5,4 +5,6 @@ interface ViewsActivityInterface {
     fun setProgressBar(view: Int)
     fun setLocation(newLat: String, newLon: String)
     fun getUrl(): String
+    fun addFragments()
+    fun setGpsProvider()
 }

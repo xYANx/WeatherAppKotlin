@@ -8,15 +8,14 @@ import android.util.Log
 import com.navoichykyan.brightday.repository.setUrl
 import com.navoichykyan.brightday.weatherlist.WeatherFragment
 
-class MyLocationListener(private val presenter: WeatherFragment, private val viewsActivityInterface: ViewsActivityInterface):
+class MyLocationListener(private val viewsActivityInterface: ViewsActivityInterface):
     LocationListener {
     override fun onLocationChanged(location: Location) {
-        presenter.loadData(setUrl(location.latitude.toString(), location.longitude.toString()))
         viewsActivityInterface.setLocation(location.latitude.toString(), location.longitude.toString())
+        viewsActivityInterface.addFragments()
     }
     override fun onProviderDisabled(provider: String) {
-        Log.d("CHECK LOCATION ", "onProviderDisabled")
-        presenter.setGpsProvider()
+        viewsActivityInterface.setGpsProvider()
     }
     override fun onProviderEnabled(provider: String) {
         Log.d("CHECK LOCATION ", "onProviderEnabled")
