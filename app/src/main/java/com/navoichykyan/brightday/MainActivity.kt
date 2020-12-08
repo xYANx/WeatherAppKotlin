@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
             return
         } else {
             permission = true
-            Log.d("CHECK_LOCATION ", "GO!")
         }
 
         if (permission) {
@@ -86,7 +85,12 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         when (requestCode) {
             0 -> {
                 permission = true
-                //locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 10f, MyLocationListener(presenter))
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment,
+                        WeatherFragment.newInstance(),
+                        WeatherFragment.TAG)
+                    .commit()
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     Log.d("CHECK LOCATION ", "PERMISSION_GRANTED")

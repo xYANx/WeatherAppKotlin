@@ -29,7 +29,6 @@ class WeatherFragment : Fragment(),
     private var activityContext: Context? = null
 
     override fun onAttach(context: Context) {
-        Log.d("WeatherFragment ", "onAttach")
         super.onAttach(context)
         activityContext = context
         if (context is ViewsActivityInterface) {
@@ -45,12 +44,12 @@ class WeatherFragment : Fragment(),
 
     @SuppressLint("MissingPermission")
     override fun onResume() {
-        Log.d("WeatherFragment ", "onResume")
         super.onResume()
+        viewsActivityInterface!!.setProgressBar(View.VISIBLE)
         locationManager =
             activityContext!!.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager?
         locationManager!!.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
+            LocationManager.NETWORK_PROVIDER,
             0,
             10f,
             MyLocationListener(this, viewsActivityInterface!!)
@@ -68,15 +67,27 @@ class WeatherFragment : Fragment(),
         )
     }
 
+    @SuppressLint("MissingPermission")
+    fun setGpsProvider(){
+        locationManager!!.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            0,
+            10f,
+            MyLocationListener(this, viewsActivityInterface!!)
+        )
+    }
+
     override fun showWeatherList(list: List<List<WeatherDataModel>>) {
-        textCity.text = list[0][0].city
-        textMainTemp.text = list[0][0].temp
-        textMainDescription.text = list[0][0].description
-        cloudsText.text = (list[0][0].clouds + "%")
-        windText.text = (list[0][0].wind + " km/h")
+        val firstDay = list[0][0]
+        textCity.text = firstDay.city
+        textMainTemp.text = firstDay.temp
+        textMainDescription.text = firstDay.description
+        cloudsText.text = (firstDay.clouds + "%")
+        windText.text = (firstDay.wind + " km/h")
         Glide.with(this)
-            .load(list[0][0].icon)
+            .load(firstDay.icon)
             .into(imageMain)
+        presenter?.dispose()
     }
 
     companion object {
