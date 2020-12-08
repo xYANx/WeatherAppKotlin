@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
                             .beginTransaction()
                             .replace(
                                 R.id.fragment,
-                                ForecastFragment.newInstance(setUrl(lat, lon)),
+                                ForecastFragment.newInstance(),
                                 ForecastFragment.TAG
                             )
                             .commit()
@@ -77,7 +78,6 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
                 }
             }
         }
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -116,4 +116,6 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
         lat = newLat
         lon = newLon
     }
+
+    override fun getUrl(): String = setUrl(lat, lon)
 }

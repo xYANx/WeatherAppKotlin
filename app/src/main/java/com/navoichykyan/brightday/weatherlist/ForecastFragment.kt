@@ -19,7 +19,7 @@ import com.navoichykyan.brightday.weatherlist.presenter.WeatherPresenterInterfac
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherViewInterface
 import kotlinx.android.synthetic.main.fragment_forecast.*
 
-class ForecastFragment(private val url: String): Fragment(),
+class ForecastFragment(): Fragment(),
     WeatherViewInterface {
     private var presenter: WeatherPresenterInterface? = null
     private var viewsActivityInterface: ViewsActivityInterface? = null
@@ -46,7 +46,7 @@ class ForecastFragment(private val url: String): Fragment(),
                 this,
                 viewsActivityInterface
             )
-        presenter?.fetchWeatherList(url)
+        presenter?.fetchWeatherList(viewsActivityInterface!!.getUrl())
     }
 
     private fun initWeatherList() {
@@ -63,7 +63,7 @@ class ForecastFragment(private val url: String): Fragment(),
 
     companion object {
         const val TAG = "ForecastFragment"
-        fun newInstance(url: String) =
-            ForecastFragment(url)
+        fun newInstance() =
+            ForecastFragment()
     }
 }
