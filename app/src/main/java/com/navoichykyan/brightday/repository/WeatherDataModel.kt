@@ -10,5 +10,8 @@ data class WeatherDataModel(
     val id: String,
     val clouds: String,
     val wind: String,
+    val humidity: String,
+    val pressure: String,
+    val visibility: String,
     val day: Int
 )

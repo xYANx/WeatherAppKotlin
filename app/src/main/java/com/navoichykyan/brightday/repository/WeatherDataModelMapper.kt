@@ -1,5 +1,6 @@
 package com.navoichykyan.brightday.repository
 
+import android.util.Log
 import org.json.JSONObject
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -32,6 +33,9 @@ class WeatherDataModelMapper : (String) -> MutableList<MutableList<WeatherDataMo
                 val temp = jsonListArray.getJSONObject(i).getJSONObject("main").getString("temp")
                 val clouds = jsonListArray.getJSONObject(i).getJSONObject("clouds").getString("all")
                 val wind = jsonListArray.getJSONObject(i).getJSONObject("wind").getString("speed")
+                val humidity = jsonListArray.getJSONObject(i).getJSONObject("main").getString("humidity")
+                val pressure = jsonListArray.getJSONObject(i).getJSONObject("main").getString("pressure")
+                val visibility = jsonListArray.getJSONObject(i).getString("visibility")
                 val dataModel = with(jsonWeatherArray.getJSONObject(0)) {
                     WeatherDataModel(
                         main = getString("main"),
@@ -43,6 +47,9 @@ class WeatherDataModelMapper : (String) -> MutableList<MutableList<WeatherDataMo
                         date = dateText,
                         clouds = clouds,
                         wind = wind,
+                        humidity = humidity,
+                        pressure = pressure,
+                        visibility = visibility,
                         day = dayNumber
                     )
                 }
@@ -51,7 +58,7 @@ class WeatherDataModelMapper : (String) -> MutableList<MutableList<WeatherDataMo
                 } else{
                     saveDayNumber = dayNumber
                     listWeatherList.add(weatherList)
-                    weatherList = mutableListOf<WeatherDataModel>()
+                    weatherList = mutableListOf()
                     weatherList.add(dataModel)
                 }
             }

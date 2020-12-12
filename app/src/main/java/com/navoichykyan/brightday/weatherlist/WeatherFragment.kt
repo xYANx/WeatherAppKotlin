@@ -67,6 +67,9 @@ class WeatherFragment : Fragment(),
         textMainDescription.text = firstDay.description
         cloudsText.text = (firstDay.clouds + "%")
         windText.text = (firstDay.wind + " km/h")
+        visibilityText.text = ((firstDay.visibility.toDouble()/1000).toString() + " km")
+        humidityText.text = (firstDay.humidity + "%")
+        pressureText.text = (firstDay.pressure + " hPa")
         Glide.with(this)
             .load(firstDay.icon)
             .into(imageMain)
