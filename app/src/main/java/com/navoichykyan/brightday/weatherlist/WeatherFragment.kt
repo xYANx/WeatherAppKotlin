@@ -35,6 +35,11 @@ class WeatherFragment : Fragment(),
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter!!.dispose()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
