@@ -37,7 +37,7 @@ class WeatherFragment : Fragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter!!.dispose()
+        presenter?.dispose()
     }
 
     override fun onCreateView(
@@ -49,15 +49,21 @@ class WeatherFragment : Fragment(),
     @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
-        viewsActivityInterface!!.setProgressBar(View.VISIBLE)
-        presenter =
-            WeatherPresenter(
-                this,
-                viewsActivityInterface
-            )
-        presenter?.fetchWeatherList(
-            viewsActivityInterface!!.getUrl()
-        )
+        load()
+    }
+
+    override fun load() {
+        val lat = viewsActivityInterface!!.getLocation()[0]
+        val lon = viewsActivityInterface!!.getLocation()[1]
+        if (lat != "0.0" && lon != "0.0") {
+            viewsActivityInterface!!.setProgressBar(View.VISIBLE)
+            presenter =
+                WeatherPresenter(
+                    this,
+                    viewsActivityInterface
+                )
+            presenter?.fetchWeatherList(setUrl(lat, lon))
+        }
     }
 
     override fun showWeatherList(list: List<List<WeatherDataModel>>) {
@@ -67,7 +73,7 @@ class WeatherFragment : Fragment(),
         textMainDescription.text = firstDay.description
         cloudsText.text = (firstDay.clouds + "%")
         windText.text = (firstDay.wind + " km/h")
-        visibilityText.text = ((firstDay.visibility.toDouble()/1000).toString() + " km")
+        visibilityText.text = ((firstDay.visibility.toDouble() / 1000).toString() + " km")
         humidityText.text = (firstDay.humidity + "%")
         pressureText.text = (firstDay.pressure + " hPa")
         Glide.with(this)

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.navoichykyan.brightday.R
 import com.navoichykyan.brightday.ViewsActivityInterface
 import com.navoichykyan.brightday.repository.WeatherDataModel
+import com.navoichykyan.brightday.repository.setUrl
 import com.navoichykyan.brightday.weatherlist.adapters.WeatherAdapter
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherPresenter
 import com.navoichykyan.brightday.weatherlist.presenter.WeatherPresenterInterface
@@ -43,12 +44,16 @@ class ForecastFragment() : Fragment(),
     override fun onResume() {
         super.onResume()
         initWeatherList()
-        presenter =
-            WeatherPresenter(
-                this,
-                viewsActivityInterface
-            )
-        presenter?.fetchWeatherList(viewsActivityInterface!!.getUrl())
+        val lat = viewsActivityInterface!!.getLocation()[0]
+        val lon = viewsActivityInterface!!.getLocation()[1]
+        if (lat != "0.0" && lon != "0.0") {
+            presenter =
+                WeatherPresenter(
+                    this,
+                    viewsActivityInterface
+                )
+            presenter?.fetchWeatherList(setUrl(lat, lon))
+        }
     }
 
     private fun initWeatherList() {
@@ -61,6 +66,10 @@ class ForecastFragment() : Fragment(),
 
     override fun showWeatherList(list: List<List<WeatherDataModel>>) {
         (viewWeatherList.adapter as WeatherAdapter).updateItemList(list)
+    }
+
+    override fun load() {
+        TODO("Not yet implemented")
     }
 
     companion object {
