@@ -167,7 +167,8 @@ class MainActivity : AppCompatActivity(), ViewsActivityInterface {
     }
 
     override fun update() {
-        presenter.load()
+        if(currentFragment == WeatherFragment.TAG)
+            presenter.load()
     }
 
     @SuppressLint("MissingPermission")

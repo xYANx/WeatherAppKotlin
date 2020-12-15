@@ -32,7 +32,7 @@ class ForecastFragment() : Fragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter!!.dispose()
+        presenter?.dispose()
     }
 
     override fun onCreateView(
